@@ -5,7 +5,6 @@ using std::endl;
 class BaseClass {
 public:
   BaseClass() {
-    print_it();
   }
   virtual void print_it() {
     cout << "BaseClass print_it" << endl;
@@ -15,10 +14,15 @@ public:
 class DerivedClass: public BaseClass {
 public:
   DerivedClass() {
-    print_it();
   }
   void print_it(){
     cout << "Derived Class print_it" << endl;
+  }
+};
+
+class DerivedClass2: public BaseClass {
+public:
+  DerivedClass2() {
   }
 };
 
@@ -28,7 +32,10 @@ void func(BaseClass* obj) {
 
 int main() {
   DerivedClass* dc = new DerivedClass();
+  DerivedClass2* dc2 = new DerivedClass2();
+  
   func(dc);
+  func(dc2);
 }
 
 /* OUTPUT
