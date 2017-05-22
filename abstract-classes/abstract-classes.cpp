@@ -36,9 +36,18 @@ public:
   }
 };
 
+Shape* newTriangle() {
+  Triangle* newTri = new Triangle();
+  newTri->setHeight(6);
+  newTri->setWidth(8);
+
+  return newTri;
+}
+
 int main() {
   Rectangle Rect;
   Triangle Tri;
+  Shape* aShape;
 
   Rect.setWidth(5);
   Rect.setHeight(7);
@@ -50,5 +59,9 @@ int main() {
 
   cout << "Total Triangle area: " << Tri.getArea() << endl;
 
+  aShape = newTriangle();
+
+  cout << aShape->getArea() << endl;
+  
   return 0;
 }
