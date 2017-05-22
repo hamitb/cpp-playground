@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <stdio.h>
+#include <vector>
 
 using namespace std;
 
@@ -15,9 +16,12 @@ using namespace std;
 }*/
 class Pokemon {
 public:
-  Pokemon(int id, string name, string type)
+  Pokemon(int id, const string& name, string type)
     : id(id), name(name), type(type) {}
-
+  
+  void Info() {
+    cout << "[" << id << ", " << name << ", " << type << "]" << endl;
+  }
   int id;
   string name;
   string type;
@@ -25,14 +29,19 @@ public:
 
 class Trainer {
 public:
-  Trainer(int id, string name, string favArea)
-    : id(id), name(name), favArea(favArea) {}
-  
+  Trainer(int id, string name, string favArea, vector<Pokemon *> pokemons)
+    : id(id), name(name), favArea(favArea), pokemons(pokemons) {}
+  void Info() {
+    cout << "**" << id << ", " << name << ", " << favArea << "**" << endl;
+    for(int i = 0; i < pokemons.size(); i ++) {
+      pokemons[i]->Info();
+    }
+  }
   int id;
   string name;
   string favArea;
+  vector<Pokemon *> pokemons;
 };
-
 
 int parsePokemonCount(string line) {
   int result;
@@ -47,7 +56,7 @@ int parsePokemonCount(string line) {
   return result;
 }
 
-Trainer* parseTrainer(string line) {
+Trainer* parseTrainer(string line, vector<Pokemon *> pokemons) {
   Trainer* trainer;
   char * cstr = new char [line.length()];
   int id;
@@ -64,8 +73,7 @@ Trainer* parseTrainer(string line) {
   strcpy(cstr, line.c_str());
 
   sscanf(cstr, "%d %s %s", &id, name, favArea);
-  cout << id << ", " << name << ", " << favArea << endl;
-  trainer = new Trainer(id, name, favArea);
+  trainer = new Trainer(id, name, favArea, pokemons);
 
   delete[] cstr;
 
@@ -90,7 +98,6 @@ Pokemon* parsePokemon(string line) {
   strcpy(cstr, line.c_str());
 
   sscanf(cstr, "%d %s %s", &id, name, type);
-  cout << id << ", " << name << ", " << type << endl;
   pokemon = new Pokemon(id, name, type);
 
   delete[] cstr;
@@ -114,6 +121,7 @@ int parseTrainerCount(string line) {
 int main() {
   string fileLocation = "2Trainers.txt";
   string line;
+  vector<Trainer *> trainers;
 
   int trainerCount;
   int pokemonCount;
@@ -131,15 +139,25 @@ int main() {
   getline(sampleFile, line);
 
   for(int i = 0; i < trainerCount; i++) {
-    getline(sampleFile, line);
-    Trainer* trainer = parseTrainer(line);
+    string tstring;
+    string pstring;
+    vector<Pokemon *> pokemons;
+    getline(sampleFile, tstring);
     
     for(int j = 0; j < pokemonCount; j++) {
-      getline(sampleFile, line);
-      Pokemon* pokemon = parsePokemon(line);
+      getline(sampleFile, pstring);
+      Pokemon* pokemon = parsePokemon(pstring);
+      pokemons.push_back(pokemon);
     }
 
+    Trainer* trainer = parseTrainer(tstring, pokemons);
+    trainers.push_back(trainer);
     getline(sampleFile, line);    
+  }
+
+  for(int i = 0; i < trainers.size(); i++) {
+    trainers[i]->Info();
+    cout << endl;
   }
 
   return 0;
