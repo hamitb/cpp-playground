@@ -107,6 +107,16 @@ Pokemon* parsePokemon(string line) {
 
 int parseTrainerCount(string line) {
   int result;
+  int some = 2;
+
+  switch(some){
+    case 1:
+      cout << "some1" << endl;
+      break;
+    case 0:
+      cout << "some0" << endl;
+      break;
+  }
   char * cstr = new char [line.length()+1];
 
   strcpy(cstr, line.c_str());
@@ -156,10 +166,10 @@ int main() {
   }
 
   for(int i = 0; i < trainers.size(); i++) {
-    trainers[i]->Info();
-    cout << endl;
+    if(trainers[i]->id == 0){
+      trainers[i]->Info();
+      break;
+    }
   }
-
   return 0;
-
 }
